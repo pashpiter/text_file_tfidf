@@ -1,6 +1,6 @@
 from django import forms
-from text_handler.models import Document
 
+from text_handler.models import Document
 
 ALLOWED_SUFFIX = ['txt',]
 

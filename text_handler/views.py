@@ -1,11 +1,12 @@
 import re
-from django.shortcuts import render, redirect
-from django.db.models import Count
-from django.db.models.functions.math import Ln
-from django.db.models.functions import Round
 
-from text_handler.models import Document, Word
+from django.db.models import Count
+from django.db.models.functions import Round
+from django.db.models.functions.math import Ln
+from django.shortcuts import render
+
 from text_handler.forms import DocumentForm
+from text_handler.models import Document, Word
 
 
 def index(request):
