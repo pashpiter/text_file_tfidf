@@ -1,5 +1,38 @@
 {% extends 'base.html' %}
 {% block content %}
-    <h1>Добавить файл в ротацию</h1>
-    <div>Файл принят</div>
+    <h1>TFIDF для добавленного файла</h1>
+    <div>
+        <h5>
+            Общее количество текстов в коллекции: {{ num_docs }}
+        </h5>
+        <h5>
+            Общее количество слов в коллекции: {{ num_words }}
+        </h5>
+        <table border="1">
+            <thead>
+            <tr>
+                <th>Слово</th>
+                <th>TF</th>
+                <th>IDF</th>
+                <th>TFIDF</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for obj in page_obj %}
+            <tr>
+                <td width="100" height="50" align="center">{{ obj.word }}</td>
+                <td width="100" height="50" align="center">{{ obj.tf }}</td>
+                <td width="100" height="50" align="center">{{ obj.idf }}</td>
+                <td width="100" height="50" align="center">{{ obj.tfidf }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <br>
+        <div class="d-flex justify-content-end">
+            <button onclick="document.location=''">
+                Добавить текст
+            </button>
+        </div>
+    </div>
 {% endblock %}

@@ -1,6 +1,6 @@
 import re
 from django.shortcuts import render, redirect
-from django.db.models import Count, F, FloatField, ExpressionWrapper
+from django.db.models import Count
 from django.db.models.functions.math import Ln
 from django.db.models.functions import Round
 
@@ -18,15 +18,19 @@ def index(request):
             file.save()
             words = file.file.instance.file.read().decode('UTF-8').lower()
             words = re.sub(r'[^\w\s]', '', words).split()
-            calculate(words, file)
-            return render(request, 'text_handler/good.html')
+            tfidf = calculate(words, file)
+            return render(request, 'text_handler/good.html', context={
+                'page_obj': tfidf,
+                'num_docs': count_doc_obj(),
+                'num_words': Word.objects.all().count()
+            })
         return render(request, template, {'form': form})
     form = DocumentForm()
     return render(request, template, {'form': form})
 
 
-def calculate(words: list, file):
-    tf: list = [
+def calculate(words: list, file: Document) -> list[dict]:
+    tf = [
         {
             'word': word,
             'tf': "{:.2f}".format(words.count(word)/len(words))
@@ -37,7 +41,7 @@ def calculate(words: list, file):
         ) for word in words
     ]
     Word.objects.bulk_create(objs)
-    num_docs = Document.objects.all().count()
+    num_docs = count_doc_obj()
     idf = Word.objects.values('word').filter(word__in=words).annotate(
         idf=Round(Ln(num_docs*1.0/Count('word')), 2)).values('word', 'idf')
     l1 = {d['word']: d for d in tf}
@@ -46,4 +50,9 @@ def calculate(words: list, file):
         **l1.get(d['word']),
         **{'tfidf': '%.2f' % (d['idf']*float(l1.get(d['word'])['tf']))}
     ) for d in idf]
-    [print(f) for f in tfidf]
+    tfidf = sorted(tfidf, key=lambda x: x['tf'], reverse=True)
+    return tfidf
+
+
+def count_doc_obj() -> int:
+    return Document.objects.all().count()
