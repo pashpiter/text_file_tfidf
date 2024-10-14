@@ -21,7 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-^9)@zl6a&npz+52lep1_u&chr%t3%%beu__s1hgqy9+4^^hoct'
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-^9)@zl6a&npz+52lep1_u&chr%t3%%beu__s1hgqy9+4^^hoct')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -78,8 +78,12 @@ WSGI_APPLICATION = 'tfidf.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': os.environ.get('ENGINE', 'django.db.backends.sqlite3'),
+        'NAME': os.environ.get('NAME', os.path.join(BASE_DIR, 'db.sqlite3')),
+        'USER': os.environ.get('USER', 'postgres'),
+        'PASSWORD': os.environ.get('PASSWORD', 'postgres'),
+        'HOST': os.environ.get('HOST', 'db'),
+        'PORT': os.environ.get('POST', 5432)
     }
 }
 
