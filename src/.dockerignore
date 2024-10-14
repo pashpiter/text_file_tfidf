@@ -1,0 +1,11 @@
+.vscode/
+.pytest_cache/
+venv/
+tests/
+__pycache__/
+pytest.ini
+commands.md
+media/
+*.sqlite3
+tmp/
+tmp*/

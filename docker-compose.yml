@@ -1,0 +1,32 @@
+services:
+
+  db:
+    image: postgres:13.0-alpine
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+
+  app:
+    depends_on:
+      - db
+    build: src/.
+    container_name: "tfidf"
+    ports:
+      - 8000:8000
+    command: bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - static_value:/app/static/
+      - media_value:/app/media/
+    env_file:
+      - .env
+    restart: always
+
+volumes:
+  static_value:
+  media_value:
+  postgres_data:
