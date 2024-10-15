@@ -22,6 +22,11 @@ git clone git@github.com:pashpiter/text_file_tfidf.git
 ```
 * Перейти в папку text_file_tfidf
 
+* Изменить название файла с переменными окружения
+```.env.example -> .env```
+
+* Изменить переменные окружения (если нужно)
+
 * Запустить проект используя docker-compose
 ```
 sudo docker compose up -d
